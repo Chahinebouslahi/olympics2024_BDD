@@ -1,0 +1,104 @@
+CREATE TABLE Coach(
+   Id_Coach INT,
+   Nom_coach VARCHAR(50),
+   Prénom VARCHAR(50),
+   PRIMARY KEY(Id_Coach)
+);
+
+CREATE TABLE Pays(
+   Id_Pays INT,
+   Nom_pays VARCHAR(50),
+   PRIMARY KEY(Id_Pays)
+);
+
+CREATE TABLE Catégorie(
+   Id_Catégorie INT,
+   Nom_catégorie VARCHAR(50),
+   PRIMARY KEY(Id_Catégorie)
+);
+
+CREATE TABLE Ville(
+   Id_Ville INT,
+   Nom_ville VARCHAR(50),
+   PRIMARY KEY(Id_Ville)
+);
+
+CREATE TABLE Lieu_event(
+   Id_Lieu_event INT,
+   Stade VARCHAR(50),
+   Id_Ville INT NOT NULL,
+   PRIMARY KEY(Id_Lieu_event),
+   FOREIGN KEY(Id_Ville) REFERENCES Ville(Id_Ville)
+);
+
+CREATE TABLE Equipe(
+   Id_Equipe INT,
+   Nom_équipe VARCHAR(50),
+   Id_Coach INT NOT NULL,
+   PRIMARY KEY(Id_Equipe),
+   UNIQUE(Id_Coach),
+   FOREIGN KEY(Id_Coach) REFERENCES Coach(Id_Coach)
+);
+
+CREATE TABLE Sport(
+   Id_Sport INT,
+   Nom_sport VARCHAR(50),
+   Id_Catégorie INT NOT NULL,
+   PRIMARY KEY(Id_Sport),
+   FOREIGN KEY(Id_Catégorie) REFERENCES Catégorie(Id_Catégorie)
+);
+
+CREATE TABLE Athlète(
+   Id_Athlète INT,
+   Nom_athlète VARCHAR(50),
+   Prénom VARCHAR(50),
+   Genre VARCHAR(50),
+   Taille VARCHAR(50),
+   Poids VARCHAR(50),
+   Date_naissance DATE,
+   Id_Equipe INT,
+   Id_Pays INT NOT NULL,
+   PRIMARY KEY(Id_Athlète),
+   FOREIGN KEY(Id_Equipe) REFERENCES Equipe(Id_Equipe),
+   FOREIGN KEY(Id_Pays) REFERENCES Pays(Id_Pays)
+);
+
+CREATE TABLE Discipline(
+   Id_Discipline INT,
+   Nom_discipline VARCHAR(50),
+   Id_Sport INT NOT NULL,
+   PRIMARY KEY(Id_Discipline),
+   FOREIGN KEY(Id_Sport) REFERENCES Sport(Id_Sport)
+);
+
+CREATE TABLE Epreuve(
+   Id_Epreuve INT,
+   Année DATE,
+   Nom_épreuve VARCHAR(50),
+   Id_Discipline INT NOT NULL,
+   Id_Lieu_event INT NOT NULL,
+   PRIMARY KEY(Id_Epreuve),
+   FOREIGN KEY(Id_Discipline) REFERENCES Discipline(Id_Discipline),
+   FOREIGN KEY(Id_Lieu_event) REFERENCES Lieu_event(Id_Lieu_event)
+);
+
+CREATE TABLE Résultat(
+   id_res INT,
+   Position_classement VARCHAR(50),
+   Id_Athlète INT NOT NULL,
+   Id_Epreuve INT NOT NULL,
+   PRIMARY KEY(id_res),
+   FOREIGN KEY(Id_Athlète) REFERENCES Athlète(Id_Athlète),
+   FOREIGN KEY(Id_Epreuve) REFERENCES Epreuve(Id_Epreuve)
+);
+
+CREATE TABLE Médailles(
+   Id_Médailles INT,
+   Type VARCHAR(50),
+   id_res INT NOT NULL,
+   Id_Athlète INT NOT NULL,
+   PRIMARY KEY(Id_Médailles),
+   UNIQUE(id_res),
+   FOREIGN KEY(id_res) REFERENCES Résultat(id_res),
+   FOREIGN KEY(Id_Athlète) REFERENCES Athlète(Id_Athlète)
+);

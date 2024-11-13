@@ -1,0 +1,38 @@
+# Compter le nombre de médailles par type pour chaque pays
+
+SELECT p.`Nom_pays`, m.`Type`, COUNT(m.`Type`) AS `Nombre_de_médailles`
+FROM `pays` p
+JOIN `athlète` a ON p.`Id_Pays` = a.`Id_Pays`
+JOIN `médailles` m ON a.`Id_Athlète` = m.`Id_Athlète`
+GROUP BY p.`Nom_pays`, m.`Type`;
+
+#Afficher les athlètes avec le type de médaille qu'ils ont gagné et l'épreuve correspondante
+
+SELECT a.`Nom_athlète`, a.`Prénom`, m.`Type`, e.`Nom_épreuve`
+FROM `athlète` a
+JOIN `médailles` m ON a.`Id_Athlète` = m.`Id_Athlète`
+JOIN `résultat` r ON m.`id_res` = r.`id_res`
+JOIN `epreuve` e ON r.`Id_Epreuve` = e.`Id_Epreuve`;
+
+#Affichage des épreuves avec le nom du stade et la ville
+
+SELECT epreuve.Nom_épreuve, lieu_event.Stade, ville.Nom_ville
+FROM epreuve
+JOIN lieu_event ON epreuve.Id_Lieu_event = lieu_event.Id_Lieu_event
+JOIN ville ON lieu_event.Id_Ville = ville.Id_Ville;
+
+#Liste des disciplines et leur sport associé
+
+SELECT discipline.Nom_discipline, sport.Nom_sport
+FROM discipline
+JOIN sport ON discipline.Id_Sport = sport.Id_Sport;
+
+#Liste des athlètes qui ont remporté une médaille d'or
+
+SELECT athlète.Prénom, athlète.Nom_athlète, médailles.Type
+FROM athlète
+JOIN médailles ON athlète.Id_Athlète = médailles.Id_Athlète
+WHERE médailles.Type = 'Or';
+
+
+
